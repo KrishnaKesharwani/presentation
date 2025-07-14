@@ -60,7 +60,7 @@ export class SlideComponent implements OnInit {
   currentSlideIndex = 0;
   imagesLoaded: boolean[] = [];
   allImagesLoaded = false;
-  mainTitle: any
+  mainTitle: any;
   // constructor(private slideService: SlideService) { }
   // sliderAllJsonData: any = SliderJson;
   sliderAllJsonData: any = '';
