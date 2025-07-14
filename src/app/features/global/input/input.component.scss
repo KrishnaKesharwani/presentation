@@ -1,0 +1,36 @@
+.bottom_error_msg {
+    position: absolute;
+    color: #ff0202;
+    bottom: -23px;
+    font-size: 12px;
+}
+
+::ng-deep {
+    .date_picker_block {
+        .mat-datepicker-toggle {
+            button {
+                position: absolute;
+                right: -4px;
+                top: 0px;
+                z-index: 10;
+                opacity: .7;
+                transition: .5s all;
+                padding: 0px;
+                height: 40px;
+                width: 40px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+                svg {
+                    width: 20px !important;
+                    height: 20px !important;
+                }
+
+                &:hover {
+                    opacity: .7;
+                }
+            }
+        }
+    }
+}

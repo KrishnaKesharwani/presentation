@@ -1,0 +1,26 @@
+<mat-form-field class="global_textbox_block" [class.date_picker_block]="isDateField" appearance="outline">
+    <mat-label>{{ label }}</mat-label>
+    <input matInput *ngIf="!isDateField" [disabled]="disabled" [required]="isRequired" [formControl]="control"
+        [readonly]="readonly">
+    <ng-container *ngIf="isDateField">
+        <input [max]="maxDate" matInput [matDatepicker]="picker" (dateChange)="onDateChange($event)"
+            class="datepicker_text" [disabled]="disabled" [required]="isRequired" [formControl]="control" />
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+    </ng-container>
+    <div *ngIf="control?.invalid && control?.touched" class="{{ className }}">
+        <span *ngIf="control.errors?.['required']">{{ displayMsg }}</span>
+        <span *ngIf="control.errors?.['minlength']">Minimum length is {{
+            control.errors?.['minlength'].required
+            }} characters</span>
+        <span *ngIf="control?.errors?.['maxlength']">Maximum length is {{
+            control.errors?.['maxlength'].required
+            }} characters</span>
+        <span *ngIf="control?.errors?.['pattern']">Invalid format</span>
+    </div>
+</mat-form-field>
+
+<mat-form-field appearance="outline" class="global_textbox_block">
+  <mat-label>Presentation URL</mat-label>
+  <input matInput formControlName="presentation_url" readonly>
+</mat-form-field>

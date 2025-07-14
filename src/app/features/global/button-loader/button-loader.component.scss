@@ -1,0 +1,11 @@
+::ng-deep {
+    .button_spinner {
+        margin-right: 10px;
+
+        circle,
+        svg {
+            stroke: white !important;
+        }
+    }
+
+}

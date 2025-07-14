@@ -1,0 +1,28 @@
+<div class="dialoge_header">
+    <div class="left_text">{{dataa.title}}</div>
+    <!-- <mat-icon class="close-icon" (click)="onClose()" color="warn">close</mat-icon> -->
+</div>
+<div class="dialoge_middle_container small_popup">
+    <form form="shareForm" class="main_form">
+        <!-- <span>{{ dataa.url | json}}</span> -->
+        <mat-form-field class="global_textbox_block" appearance="outline">
+            <mat-label>Presentation Url</mat-label>
+            <!-- <input matInput placeholder="Share Presentation" />  readonly="readonly" -->
+            <input matInput formControlName="presentation_url" [value]="dataa.url" readonly #presentationInput />
+        </mat-form-field>
+        <!-- <app-input [isDateField]="false" label="Share Presentation" [(value)]="presentation_url"
+            [className]="'bottom_error_msg'" [form]="shareForm" [key]="'presentation_url'"
+            [displayMsg]="'Presentation Url is required'"></app-input> -->
+        <!-- <app-dropdwon [jsonKey]="'name'" [arrayType]="'KEY_TYPE'" [form]="changeMemberForm" [key]="'assigned_member_id'"
+            [optionArray]="dropdownService.getmemberdata"
+            *ngIf="dropdownService.getmemberdata?.length && changeMemberForm" field="Assign Member"></app-dropdwon> -->
+    </form>
+</div>
+<div class="dialoge_button_container">
+    <button class="global_close_btn" (click)="onClose()" mat-stroked-button>Close</button>
+    <button type="submit" class="global_submit_btn" mat-flat-button (click)="copyDemoUrl()">
+        <mat-icon class="submitbtn_icon" *ngIf="!loading">check</mat-icon>
+        <app-button-loader *ngIf="loading" [diameter]="'18'"></app-button-loader>
+        <span>Copy Demo URL</span>
+    </button>
+</div>
