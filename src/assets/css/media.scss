@@ -1,0 +1,36 @@
+// Extra small devices (phones, less than 600px)
+@media (max-width: 599px) {
+
+    // Your styles for phones
+    .home-container {
+        .content {
+            max-width: 350px !important;
+        }
+    }
+}
+
+// Small devices (portrait tablets and large phones, 600px and up)
+@media (min-width: 600px) and (max-width: 899px) {
+
+    // Your styles for small tablets
+    .home-container {
+        .content {
+            max-width: 500px !important;
+        }
+    }
+}
+
+// Medium devices (landscape tablets, 900px and up)
+@media (min-width: 900px) and (max-width: 1199px) {
+    // Your styles for tablets
+}
+
+// Large devices (desktops, 1200px and up)
+@media (min-width: 1200px) and (max-width: 1799px) {
+    // Your styles for desktops
+}
+
+// Extra large devices (large desktops, 1800px and up)
+@media (min-width: 1800px) {
+    // Your styles for large desktops
+}

@@ -1,0 +1,231 @@
+<!-- <span> {{sliderAllJsonData | json}}</span> 
+ <span> {{slides | json }}</span>-->
+<!-- <div class="particular_image_only">
+  <ng-container *ngFor="let slide of slides; let i = index">
+    <div [class.active_slide]="i === currentSlideIndex" class="slide_block" [hidden]="!allImagesLoaded">
+      <div *ngIf="imageLoading[i]" class="loading-indicator">
+        Loading...
+      </div>
+      <img [src]="slide.contentUrl" alt="Slide image" class="slide-image"
+        [class.hidden]="imageLoading[i] || imageLoadError[i]" (load)="onImageLoad(i)" (error)="onImageError(i)"
+        loading="eager" />
+      <div *ngIf="imageLoadError[i]" class="image-error">
+        Failed to load image
+      </div>
+      <ng-container *ngFor="let shape of slide.shapes;">
+        <div [ngStyle]="getShapeStyle(shape)" style="opacity: 1 !important;transform: scale(1.1);" class="hotspot">
+        </div>
+        <div [class.active_slide_popover]="i === currentSlideIndex && showPopover" class="popover_container"
+          [ngStyle]="currentPopoverStyle" [ngClass]="getPopoverPosition(shape)">
+          <div class="popover-content">
+            <div class="popover-text">{{ shape.text }}
+            </div>
+            <div class="popover-actions">
+              <button class="nav-btn prev" (click)="previousSlide()">
+                <mat-icon>arrow_back</mat-icon>
+              </button>
+              <button class="nav-btn next" (click)="nextSlide()">
+                <mat-icon>arrow_forward</mat-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </ng-container>
+</div> -->
+
+<ng-container *ngIf="!isLoading">
+  <section class="slider_main_section" [ngClass]="{'slider_second_section': activeDesignPattern == 'fullScreen'}">
+    <div class="main_images_block">
+      <div class="top_header_action_container">
+        <div class="arrow_container">
+          <div class="arrow_block" (click)="previousSlide()"><mat-icon>arrow_back</mat-icon></div>
+          <div class="arrow_block" (click)="nextSlide()"><mat-icon>arrow_forward</mat-icon></div>
+        </div>
+        <div class="details_title">{{mainTitle}}</div>
+        <div class="right_actions">
+          <div class="actions_block" (click)="activeDesignPatternMode('leftRight')">
+            <mat-icon>fullscreen</mat-icon>
+          </div>
+          <div class="actions_block">
+            <mat-icon (click)="shareDemoLink()">share</mat-icon>
+          </div>
+        </div>
+      </div>
+      <div class="scale_container">
+        <ng-container *ngIf="startScreen">
+          <ng-container *ngFor="let slide of slides; let i = index">
+            <div class="slide_block active_slide" *ngIf="i == 0" [hidden]="!allImagesLoaded">
+              <div *ngIf="imageLoading[i]" class="loading-indicator">
+                Loading...
+              </div>
+              <img [src]="slide.contentUrl" alt="Slide image" class="slide-image"
+                [class.hidden]="imageLoading[i] || imageLoadError[i]" (load)="onImageLoad(i)" (error)="onImageError(i)"
+                loading="eager" />
+              <div *ngIf="imageLoadError[i]" class="image-error">
+                Failed to load image
+              </div>
+            </div>
+          </ng-container>
+        </ng-container>
+        <ng-container *ngIf="!startScreen">
+          <div class="movement_hotspot active_outline_hotspot" (click)="nextSlide()" [ngStyle]="currentHotspotStyle">
+          </div>
+          <ng-container *ngFor="let slide of slides; let i = index">
+            <div [class.active_slide]="i === currentSlideIndex" class="slide_block" [hidden]="!allImagesLoaded">
+              <div *ngIf="imageLoading[i]" class="loading-indicator">
+                Loading...
+              </div>
+              <img [src]="slide.contentUrl" alt="Slide image" class="slide-image"
+                [class.hidden]="imageLoading[i] || imageLoadError[i]" (load)="onImageLoad(i)" (error)="onImageError(i)"
+                loading="eager" />
+              <div *ngIf="imageLoadError[i]" class="image-error">
+                Failed to load image
+              </div>
+              <ng-container *ngFor="let shape of slide.shapes;">
+                <div [ngStyle]="getShapeStyle(shape)" class="hotspot">
+                </div>
+                <!-- <div [class.active_slide_popover]="i === currentSlideIndex" class="popover_container"
+                [ngStyle]="currentPopoverStyle" [ngClass]="getPopoverPosition(shape)"> -->
+                <div [class.active_slide_popover]="i === currentSlideIndex && showPopover" class="popover_container"
+                  [ngStyle]="currentPopoverStyle" [ngClass]="getPopoverPosition(shape)">
+                  <div class="popover-content">
+                    <div class="popover-text">{{ shape.text }}
+                    </div>
+                    <div class="popover-actions">
+                      <button class="nav-btn prev" (click)="previousSlide()">
+                        <mat-icon>arrow_back</mat-icon>
+                      </button>
+                      <button class="nav-btn next" (click)="nextSlide()">
+                        <mat-icon>arrow_forward</mat-icon>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+            </div>
+          </ng-container>
+        </ng-container>
+      </div>
+    </div>
+    <div class="right_details_block" [ngClass]="{'center_right_details': startScreen }">
+      <div class="middle_section" *ngIf="startScreen">
+        <div class="details_title">{{mainTitle}}</div>
+        <div class="block_flex-container">
+          <div class="counter_block">
+            <span>Total Steps :</span>
+            <span> {{slides.length}}</span>
+          </div>
+          <div class="counter_block">
+            <span>Completion time :</span>
+            <span> 2 mins</span>
+          </div>
+        </div>
+        <div class="start_button" (click)="startSlide()">Start >></div>
+      </div>
+      <div class="middle_section" *ngIf="!startScreen">
+        <div class="block_flex-container">
+          <div class="counter_block_button">
+            <span>Steps :</span>
+            <span class="right_count"> <b>{{currentSlideIndex + 1}}</b> / {{slides.length}}</span>
+          </div>
+        </div>
+        <div class="details_title_right_middle">
+          <div class="row_details">
+            <mat-icon>pan_tool</mat-icon>
+            <span class="main_title">{{ slides && slides[currentSlideIndex] &&
+              slides[currentSlideIndex].shapes && slides[currentSlideIndex].shapes[0] &&
+              slides[currentSlideIndex].shapes[0].text || 'No title available' }}
+            </span>
+          </div>
+        </div>
+        <div class="bottom_action_block">
+          <mat-icon>format_align_center</mat-icon>
+          <mat-icon (click)="activeDesignPatternMode('fullScreen')">fullscreen</mat-icon>
+          <div class="arrow_action_block">
+            <mat-icon [ngClass]="{'notActive': currentSlideIndex == 0}" (click)="previousSlide()">arrow_back</mat-icon>
+            <mat-icon (click)="nextSlide()">arrow_forward</mat-icon>
+            <!-- [ngClass]="{'notActive': currentSlideIndex == slides.length - 1}" -->
+          </div>
+          <mat-icon (click)="resetSlider()">refresh</mat-icon>
+          <mat-icon (click)="shareDemoLink()">share</mat-icon>
+          <mat-icon (click)="downloadPresentation()">download</mat-icon>
+        </div>
+      </div>
+    </div>
+  </section>
+</ng-container>
+<div class="loading_main_container" *ngIf="isLoading">
+  <div class="loading-container">
+    <div class="loader"></div>
+    <div class="progress-message">Please wait to load Presentation... </div>
+  </div>
+</div>
+<div class="loading_main_container upper_loader" *ngIf="isDownloadLoading">
+  <div class="loading-container">
+    <div class="loader"></div>
+    <div class="progress-message">Please wait to load Presentation... </div>
+  </div>
+</div>
+<!-- <section class="slider_main_section" *ngIf="activeDesignPattern == 'leftRight'">
+  <div class="main_images_block">
+    <div class="scale_container">
+      <div class="movement_hotspot" (click)="nextSlide()" [ngStyle]="currentHotspotStyle"></div>
+      <ng-container *ngFor="let slide of slides; let i = index">
+        <div [class.active_slide]="i === currentSlideIndex" class="slide_block" [hidden]="!allImagesLoaded">
+          
+          <img [src]="slide.contentUrl" alt="Slide image" class="slide-image"
+            [class.hidden]="imageLoading[i] || imageLoadError[i]" (load)="onImageLoad(i)" (error)="onImageError(i)"
+            loading="lazy" />
+          <div *ngIf="imageLoadError[i]" class="image-error">
+            Failed to load image
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+  <div class="right_details_block" [ngClass]="{'center_right_details': currentSlideIndex == 0 }">
+    <div class="middle_section" *ngIf="currentSlideIndex == 0">
+      <div class="details_title">{{mainTitle}}</div>
+      <div class="block_flex-container">
+        <div class="counter_block">
+          <span>Total Steps :</span>
+          <span> {{slides.length}}</span>
+        </div>
+        <div class="counter_block">
+          <span>Completion time :</span>
+          <span> 2 mins</span>
+        </div>
+      </div>
+      <div class="start_button" (click)="nextSlide()">Start >></div>
+    </div>
+    <div class="middle_section" *ngIf="currentSlideIndex > 0">
+      <div class="block_flex-container">
+        <div class="counter_block_button">
+          <span>Steps :</span>
+          <span class="right_count"> <b>{{currentSlideIndex}}</b> / {{slides.length}}</span>
+        </div>
+      </div>
+      <div class="details_title_right_middle">
+        <div class="row_details">
+          <mat-icon>pan_tool</mat-icon>
+          <span class="main_title">{{ slides && slides[currentSlideIndex] &&
+            slides[currentSlideIndex].shapes && slides[currentSlideIndex].shapes[0] &&
+            slides[currentSlideIndex].shapes[0].text || 'No title available' }}
+          </span>
+        </div>
+      </div>
+      <div class="bottom_action_block">
+        <mat-icon>format_align_center</mat-icon>
+        <mat-icon (click)="activeDesignPatternMode('fullScreen')">fullscreen</mat-icon>
+        <div class="arrow_action_block">
+          <mat-icon (click)="previousSlide()">arrow_back</mat-icon>
+          <mat-icon (click)="nextSlide()">arrow_forward</mat-icon>
+        </div>
+        <mat-icon>refresh</mat-icon>
+        <mat-icon>share</mat-icon>
+      </div>
+    </div>
+  </div>
+</section> -->

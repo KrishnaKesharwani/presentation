@@ -1,0 +1,18 @@
+{
+  "slides": [
+    {
+      "id": "slide1",
+      "title": "First Slide",
+      "imageUrl": "/assets/images/slide1.jpg",
+      "hotspots": [
+        {
+          "x": 20,
+          "y": 30,
+          "width": 10,
+          "height": 10,
+          "content": "This is a hotspot description"
+        }
+      ]
+    }
+  ]
+}
