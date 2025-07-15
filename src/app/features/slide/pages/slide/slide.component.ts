@@ -4,7 +4,7 @@ import { isPlatformBrowser } from '@angular/common';
 // import { SlideService } from '../../services/slide.service';
 // import { GoogleSlidesResponse, Slide } from '../../models/slide.interface';
 // import * as SliderJson from '../../backup.json';
-// import * as SliderJson from '../../google_slides_response.json'
+import * as SliderJson from '../../google_slides_response.json'
 // import { SlideModule } from '../../slide.module';
 import { MatIconModule } from '@angular/material/icon';
 import { constants } from 'node:buffer';
@@ -62,8 +62,8 @@ export class SlideComponent implements OnInit {
   allImagesLoaded = false;
   mainTitle: any;
   // constructor(private slideService: SlideService) { }
-  // sliderAllJsonData: any = SliderJson;
-  sliderAllJsonData: any = '';
+  sliderAllJsonData: any = SliderJson;
+  // sliderAllJsonData: any = '';
   imageLoadError: boolean[] = [];
   imageLoading: boolean[] = [];
   activeDesignPattern: string = 'leftRight';
@@ -108,11 +108,11 @@ export class SlideComponent implements OnInit {
 
   private async loadPresentationData(presentationId: string): Promise<void> {
     try {
-      const jsonData = await this.s3DownloadService.getJsonFromS3(presentationId);
-      if (!jsonData) {
-        throw new Error('Empty response from S3');
-      }
-      this.sliderAllJsonData = typeof jsonData === 'string' ? JSON.parse(jsonData) : jsonData;
+      // const jsonData = await this.s3DownloadService.getJsonFromS3(presentationId);
+      // if (!jsonData) {
+      //   throw new Error('Empty response from S3');
+      // }
+      // this.sliderAllJsonData = typeof jsonData === 'string' ? JSON.parse(jsonData) : jsonData;
       console.log('Downloaded JSON:', this.sliderAllJsonData);
     } catch (error) {
       console.error('Failed to fetch JSON:', error);
