@@ -1397,6 +1397,196 @@
 
 
 
+// import { Injectable } from '@angular/core';
+// import { saveAs } from 'file-saver';
+// import JSZip from 'jszip';
+
+// @Injectable({ providedIn: 'root' })
+// export class DownloadPageService {
+//   async downloadCurrentPage() {
+//     try {
+//       const zip = new JSZip();
+//       let html = this.getPageHTML();
+
+//       html = this.addInteractiveScripts(zip, html);
+//       this.addContentManager(zip);
+//       html = html.replace('</head>', `<script src="js/content-manager.js"></script>\n</head>`);
+
+//       this.addReadmeFile(zip);
+//       await this.addExternalLibraries(zip);
+
+//       const downloadedAssets = await this.processAssets(html, zip);
+//       html = this.updateAssetLinksInHTML(html, downloadedAssets);
+
+//       zip.file('index.html', html);
+//       const content = await zip.generateAsync({ type: 'blob' });
+//       saveAs(content, 'presentation.zip');
+//     } catch (error) {
+//       console.error('Error downloading page:', error);
+//     }
+//   }
+
+//   private addReadmeFile(zip: JSZip): void {
+//     const readmeContent = `INTERACTIVE PAGE DOWNLOAD
+
+// Features Included:
+// - Button click handlers
+// - Form submission handling
+// - Dark mode toggle
+// - Content preservation (saves to localStorage)
+// - Toast notifications
+// - Right-click context menu control
+// - Auto-save functionality
+
+// How to Use:
+// 1. Extract all files
+// 2. Open index.html in a browser
+// 3. Interact with the page using:
+//    - [data-action] attributes on buttons
+//    - Forms with custom submission handling
+//    - Persistent content with [data-save] attributes`;
+//     zip.file('README.txt', readmeContent);
+//   }
+
+//   private addInteractiveScripts(zip: JSZip, html: string): string {
+//     const interactiveJs = `...`; // truncated for brevity
+//     const jsFolder = zip.folder('js') || zip;
+//     jsFolder.file('interactive.js', interactiveJs);
+//     return html.replace('</body>', `<script src="js/interactive.js"></script>\n</body>`);
+//   }
+
+//   private addContentManager(zip: JSZip) {
+//     const contentManagerJs = `...`; // truncated for brevity
+//     const jsFolder = zip.folder('js') || zip;
+//     jsFolder.file('content-manager.js', contentManagerJs);
+//   }
+
+//   private async addExternalLibraries(zip: JSZip): Promise<void> {
+//     const jsFolder = zip.folder('js');
+//     try {
+//       const res = await fetch('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js');
+//       if (res.ok) {
+//         const blob = await res.blob();
+//         jsFolder?.file('jspdf.umd.min.js', blob);
+//         jsFolder?.file('init-pdf.js', `...`); // PDF initialization script
+//       }
+//     } catch (err) {
+//       console.warn('Failed to fetch jsPDF:', err);
+//     }
+//   }
+
+//   private getPageHTML(): string {
+//     const doctype = document.doctype ? new XMLSerializer().serializeToString(document.doctype) : '';
+//     return doctype + document.documentElement.outerHTML;
+//   }
+
+//   private async processAssets(html: string, zip: JSZip): Promise<Map<string, string>> {
+//     const cssFolder = zip.folder('css');
+//     const jsFolder = zip.folder('js');
+//     const imgFolder = zip.folder('images');
+//     const fontsFolder = zip.folder('fonts');
+//     const assetUrls = this.extractAssetUrls(html);
+//     const downloadedAssets = new Map<string, string>();
+
+//     for (const url of assetUrls) {
+//       try {
+//         if (!url || downloadedAssets.has(url)) continue;
+//         const cleanUrl = this.cleanAssetUrl(url);
+//         const res = await fetch(cleanUrl);
+//         if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+//         const blob = await res.blob();
+//         const filename = this.getFilenameFromUrl(cleanUrl);
+
+//         if (cleanUrl.endsWith('.css')) cssFolder?.file(filename, blob);
+//         else if (cleanUrl.endsWith('.js')) jsFolder?.file(filename, blob);
+//         else if (this.isImageUrl(cleanUrl)) imgFolder?.file(filename, blob);
+//         else if (this.isFontUrl(cleanUrl)) fontsFolder?.file(filename, blob);
+//         else zip.file(filename, blob);
+
+//         downloadedAssets.set(url, filename);
+//       } catch (error) {
+//         console.warn(`Failed to download asset: ${url}`, error);
+//         if (url.endsWith('.css')) cssFolder?.file(this.getFilenameFromUrl(url), `/* Missing: ${url} */`);
+//       }
+//     }
+
+//     return downloadedAssets;
+//   }
+
+//   private updateAssetLinksInHTML(html: string, urlMap: Map<string, string>): string {
+//     for (const [originalUrl, filename] of urlMap.entries()) {
+//       let folder = '';
+//       if (filename.endsWith('.css')) folder = 'css/';
+//       else if (filename.endsWith('.js')) folder = 'js/';
+//       else if (this.isImageUrl(filename)) folder = 'images/';
+//       else if (this.isFontUrl(filename)) folder = 'fonts/';
+//       html = html.replaceAll(originalUrl, `${folder}${filename}`);
+//     }
+//     return html;
+//   }
+
+//   private cleanAssetUrl(url: string): string {
+//     return url.split('?')[0].split('#')[0];
+//   }
+
+//   private extractAssetUrls(html: string): string[] {
+//     const urls = new Set<string>();
+//     const parser = new DOMParser();
+//     const doc = parser.parseFromString(html, 'text/html');
+
+//     const extract = (el: Element, attr: string) => {
+//       const val = el.getAttribute(attr);
+//       if (val && !val.startsWith('data:')) {
+//         try { urls.add(this.makeAbsoluteUrl(val)); } catch {}
+//       }
+//     };
+
+//     doc.querySelectorAll('link[rel="stylesheet"]').forEach(el => extract(el, 'href'));
+//     doc.querySelectorAll('script[src]').forEach(el => extract(el, 'src'));
+//     doc.querySelectorAll('img[src], source[src], source[srcset]').forEach(el => {
+//       extract(el, 'src');
+//       if (el.hasAttribute('srcset')) {
+//         el.getAttribute('srcset')?.split(',').forEach(src => {
+//           const url = src.trim().split(' ')[0];
+//           try { urls.add(this.makeAbsoluteUrl(url)); } catch {}
+//         });
+//       }
+//     });
+
+//     doc.querySelectorAll('[style]').forEach(el => {
+//       const style = el.getAttribute('style') || '';
+//       (style.match(/url\(['"]?(.*?)['"]?\)/gi) || []).forEach(match => {
+//         const urlMatch = match.match(/url\(['"]?(.*?)['"]?\)/i);
+//         if (urlMatch?.[1]) urls.add(this.makeAbsoluteUrl(urlMatch[1]));
+//       });
+//     });
+
+//     return Array.from(urls);
+//   }
+
+//   private makeAbsoluteUrl(url: string): string {
+//     if (url.startsWith('http') || url.startsWith('data:')) return url;
+//     if (url.startsWith('//')) return window.location.protocol + url;
+//     const baseElement = document.querySelector('base');
+//     const baseHref = baseElement?.getAttribute('href') || '/';
+//     return new URL(url, window.location.origin + baseHref).href;
+//   }
+
+//   private getFilenameFromUrl(url: string): string {
+//     return this.cleanAssetUrl(url).split('/').pop() || 'file';
+//   }
+
+//   private isImageUrl(url: string): boolean {
+//     return /\.(jpg|jpeg|png|gif|svg|webp|bmp|ico)$/i.test(url);
+//   }
+
+//   private isFontUrl(url: string): boolean {
+//     return /\.(woff|woff2|ttf|eot|otf)$/i.test(url);
+//   }
+// }
+
+
 import { Injectable } from '@angular/core';
 import { saveAs } from 'file-saver';
 import JSZip from 'jszip';
@@ -1449,14 +1639,14 @@ How to Use:
   }
 
   private addInteractiveScripts(zip: JSZip, html: string): string {
-    const interactiveJs = `...`; // truncated for brevity
+    const interactiveJs = `...`; // Add your interactive JavaScript code here
     const jsFolder = zip.folder('js') || zip;
     jsFolder.file('interactive.js', interactiveJs);
     return html.replace('</body>', `<script src="js/interactive.js"></script>\n</body>`);
   }
 
   private addContentManager(zip: JSZip) {
-    const contentManagerJs = `...`; // truncated for brevity
+    const contentManagerJs = `...`; // Add your content manager JavaScript code here
     const jsFolder = zip.folder('js') || zip;
     jsFolder.file('content-manager.js', contentManagerJs);
   }
@@ -1468,7 +1658,7 @@ How to Use:
       if (res.ok) {
         const blob = await res.blob();
         jsFolder?.file('jspdf.umd.min.js', blob);
-        jsFolder?.file('init-pdf.js', `...`); // PDF initialization script
+        jsFolder?.file('init-pdf.js', `...`); // Add your PDF initialization script here
       }
     } catch (err) {
       console.warn('Failed to fetch jsPDF:', err);
@@ -1585,3 +1775,4 @@ How to Use:
     return /\.(woff|woff2|ttf|eot|otf)$/i.test(url);
   }
 }
+
