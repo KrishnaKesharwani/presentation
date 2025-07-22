@@ -150,7 +150,7 @@
           </div>
           <mat-icon (click)="resetSlider()">refresh</mat-icon>
           <mat-icon (click)="shareDemoLink()">share</mat-icon>
-          <mat-icon (click)="downloadPresentation()">download</mat-icon>
+          <mat-icon *ngIf="!isDownloadLoading" (click)="downloadPresentation()">download</mat-icon>
         </div>
       </div>
     </div>

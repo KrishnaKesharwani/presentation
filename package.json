@@ -10,7 +10,6 @@
     "serve:ssr:snakewyze": "node dist/snakewyze/server/server.mjs",
     "prerender": "ng run your-app:prerender"
   },
-  
   "private": true,
   "dependencies": {
     "@angular/animations": "^19.2.4",

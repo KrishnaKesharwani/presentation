@@ -85,7 +85,7 @@ export class SlideComponent implements OnInit {
             horizontalPosition: 'center',
             verticalPosition: 'bottom'
           });
-          this.router.navigate(['home']);
+          this.router.navigate(['/']);
           return;
         } else {
           this.isLoading = true;
@@ -105,7 +105,6 @@ export class SlideComponent implements OnInit {
       }
     });
   }
-
   private async loadPresentationData(presentationId: string): Promise<void> {
     try {
       // const jsonData = await this.s3DownloadService.getJsonFromS3(presentationId);
@@ -215,13 +214,12 @@ export class SlideComponent implements OnInit {
     return null;
   }
   isDownloadLoading: boolean = false;
-
   async downloadPresentation() {
     this.isDownloadLoading = true;
     try {
       await this.downloadPageService.downloadCurrentPage();
       console.log('Download completed');
-      this.snackBar.open('Presentation downloaded successfully!', 'Close', {  
+      this.snackBar.open('Presentation downloaded successfully!', 'Close', {
         duration: 3000,
         panelClass: ['success-snackbar'],
         horizontalPosition: 'center',
