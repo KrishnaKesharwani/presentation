@@ -142,15 +142,15 @@
         </div>
         <div class="bottom_action_block">
           <mat-icon>format_align_center</mat-icon>
-          <mat-icon (click)="activeDesignPatternMode('fullScreen')">fullscreen</mat-icon>
+          <mat-icon id="fullScreenButton" (click)="activeDesignPatternMode('fullScreen')">fullscreen</mat-icon>
           <div class="arrow_action_block">
-            <mat-icon [ngClass]="{'notActive': currentSlideIndex == 0}" (click)="previousSlide()">arrow_back</mat-icon>
-            <mat-icon (click)="nextSlide()">arrow_forward</mat-icon>
+            <mat-icon id="prevClickButton" [ngClass]="{'notActive': currentSlideIndex == 0}" (click)="previousSlide()">arrow_back</mat-icon>
+            <mat-icon id="nextClickButton" (click)="nextSlide()">arrow_forward</mat-icon>
             <!-- [ngClass]="{'notActive': currentSlideIndex == slides.length - 1}" -->
           </div>
-          <mat-icon (click)="resetSlider()">refresh</mat-icon>
-          <mat-icon (click)="shareDemoLink()">share</mat-icon>
-          <mat-icon *ngIf="!isDownloadLoading" (click)="downloadPresentation()">download</mat-icon>
+          <mat-icon id="refreshButton" (click)="resetSlider()">refresh</mat-icon>
+          <mat-icon id="shareButton" (click)="shareDemoLink()">share</mat-icon>
+          <mat-icon id="downloadButton" *ngIf="!isDownloadLoading" (click)="downloadPresentation()">download</mat-icon>
         </div>
       </div>
     </div>
